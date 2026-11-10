@@ -1,0 +1,45 @@
+name: build
+
+on:
+  push:
+  pull_request:
+  workflow_dispatch:
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Projektordner finden
+        id: find
+        run: |
+          f=$(find . -name build.gradle -not -path "*/node_modules/*" | head -n 1)
+          if [ -z "$f" ]; then
+            echo "Keine build.gradle im Repo gefunden. Hast du die Projektdateien hochgeladen?"
+            ls -R
+            exit 1
+          fi
+          echo "dir=$(dirname "$f")" >> "$GITHUB_OUTPUT"
+
+      - name: JDK 21 einrichten
+        uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: 21
+
+      - name: Gradle einrichten
+        uses: gradle/actions/setup-gradle@v4
+        with:
+          gradle-version: 9.2.1
+
+      - name: Bauen
+        working-directory: ${{ steps.find.outputs.dir }}
+        run: gradle build --no-daemon --stacktrace
+
+      - name: Jar hochladen
+        uses: actions/upload-artifact@v4
+        with:
+          name: testclient
+          path: ${{ steps.find.outputs.dir }}/build/libs/*.jar
