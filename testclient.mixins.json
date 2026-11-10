@@ -1,0 +1,7 @@
+{
+  "required": false,
+  "package": "com.example.testclient.mixin",
+  "compatibilityLevel": "JAVA_21",
+  "client": [ "BlockMixin", "EntityMixin", "NetHandlerMixin", "PlayerMixin" ],
+  "injectors": { "defaultRequire": 0 }
+}

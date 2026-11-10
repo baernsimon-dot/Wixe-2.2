@@ -1,0 +1,11 @@
+{
+  "schemaVersion": 1,
+  "id": "testclient",
+  "version": "${version}",
+  "name": "TestClient",
+  "description": "Test-Client fuer Singleplayer / eigene Testserver",
+  "environment": "client",
+  "entrypoints": { "client": ["com.example.testclient.TestClient"] },
+  "mixins": [ { "config": "testclient.mixins.json", "environment": "client" } ],
+  "depends": { "fabricloader": ">=0.16.0", "minecraft": "~1.21.11", "fabric-api": "*" }
+}
